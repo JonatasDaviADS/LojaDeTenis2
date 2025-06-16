@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using LojaDeTenis.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<LojaDeTenisContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LojaDeTenisContext") ?? throw new InvalidOperationException("Connection string 'LojaDeTenisContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

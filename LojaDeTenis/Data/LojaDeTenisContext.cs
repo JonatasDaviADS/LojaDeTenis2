@@ -14,6 +14,8 @@ namespace LojaDeTenis.Data
         {
         }
 
+
         public DbSet<LojaDeTenis.Models.Categoria> Categoria { get; set; } = default!;
+        public DbSet<Pedido> Pedidos { get; set; }
     }
 }

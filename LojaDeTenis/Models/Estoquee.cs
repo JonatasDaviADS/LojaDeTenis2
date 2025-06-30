@@ -1,6 +1,6 @@
 ﻿namespace LojaDeTenis.Models
 {
-    public class Estoquee
+    public class Estoque
     {
         public int Id { get; set; }
 

@@ -1,62 +1,59 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="pt-br" data-theme="light">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LojaDeTenis</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LojaDeTenis.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/tema-personalizado.css" />
 </head>
+
 <body>
-    <header>       
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LojaDeTenis</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Produtos" asp-action="Index">Produtos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Estoques" asp-action="Index">Estoques</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Pagamento" asp-action="Index">Pagamento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Pedido" asp-action="Index">Pedido</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <!-- Navbar superior -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="/">LOJADETENIS ADMIN</a>
+        </div>
+    </nav>
+
+    <div class="d-flex">
+        <!-- Sidebar lateral fixa -->
+        <aside class="sidebar position-fixed"
+               style="width: 200px; top: 80px; left: 0; height: calc(100vh - 56px); background-color: #1E1E2F;">
+            <nav class="nav flex-column p-3">
+                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">🏠 Home</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="Produtos" asp-action="Index">👟 Produtos</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="Categorias" asp-action="Index">📂 Categorias</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="Estoques" asp-action="Index">📦 Estoque</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="Clientes" asp-action="Index">🧍 Clientes</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="NotaFiscal" asp-action="Index">🧾 Nota Fiscal</a>
+                <a class="nav-link text-white" asp-area="" asp-controller="Pagamento" asp-action="Index">💰 Pagamentos</a>
+            </nav>
+        </aside>       
+    </div>
+
+    <div>
+    <!-- Conteúdo principal -->
+        <main class="p-4" style="margin-left: 200px; margin-top: 120px; width: calc(100% - 200px);">gi
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted text-center mt-4 p-3" style="margin-left: 200px; width: calc(100% - 200px);">
         <div class="container">
-            &copy; 2025 - LojaDeTenis - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - LojaDeTenis - <a href="/Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/tema-toggle.js"></script>
+
 </body>
 </html>

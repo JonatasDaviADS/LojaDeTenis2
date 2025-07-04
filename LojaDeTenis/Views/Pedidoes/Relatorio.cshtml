@@ -3,3 +3,33 @@
 *@
 @{
 }
+@model List<LojaDeTenis.Models.ViewModels.RelatorioPedidoViewModel>
+
+@{
+    ViewData["Title"] = "Relatório de Pedidos";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Data do Pedido</th>
+            <th>Cliente</th>
+            <th>Qtd. Produtos</th>
+            <th>Valor Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DataPedido.ToString("dd/MM/yyyy")</td>
+                <td>@item.NomeCliente</td>
+                <td>@item.QuantidadeProdutos</td>
+                <td>R$ @item.ValorTotal.ToString("F2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

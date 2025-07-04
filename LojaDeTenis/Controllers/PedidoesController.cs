@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LojaDeTenis.Data;
+using LojaDeTenis.Models;
+using LojaDeTenis.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using LojaDeTenis.Data;
-using LojaDeTenis.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LojaDeTenis.Controllers
 {
@@ -25,6 +26,25 @@ namespace LojaDeTenis.Controllers
             var lojaDeTenisContext = _context.Pedido.Include(p => p.Cliente);
             return View(await lojaDeTenisContext.ToListAsync());
         }
+
+        public async Task<IActionResult> Relatorio()
+        {
+            var dados = await _context.Pedido
+                .Include(p => p.Cliente)
+                .Include(p => p.ProdutosPedidos)
+                .ThenInclude(pp => pp.Produto)
+                .Select(p => new RelatorioPedidoViewModel
+                {
+                    DataPedido = p.Data,
+                    NomeCliente = p.Cliente.Nome,
+                    QuantidadeProdutos = p.ProdutosPedidos.Sum(pp => pp.Quantidade),
+                    ValorTotal = p.ProdutosPedidos.Sum(pp => pp.PrecoUnitario * pp.Quantidade)
+                })
+                .ToListAsync();
+
+            return View(dados);
+        }
+
 
         // GET: Pedidoes/Details/5
         public async Task<IActionResult> Details(int? id)

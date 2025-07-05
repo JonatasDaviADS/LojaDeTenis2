@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LojaDeTenis.Data;
 using LojaDeTenis.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace LojaDeTenis.Controllers
 {
@@ -17,6 +18,25 @@ namespace LojaDeTenis.Controllers
         public PagamentoesController(LojaDeTenisContext context)
         {
             _context = context;
+        }
+
+        // Método auxiliar para popular dropdown com enum e Display Name
+        private SelectList ObterMetodosPagamentoSelectList(object? selecionado = null)
+        {
+            var valores = Enum.GetValues(typeof(MetodoPagamento))
+                .Cast<MetodoPagamento>()
+                .Select(e => new SelectListItem
+                {
+                    Value = e.ToString(),
+                    Text = e.GetType()
+                            .GetMember(e.ToString())
+                            .First()
+                            .GetCustomAttributes(false)
+                            .OfType<DisplayAttribute>()
+                            .FirstOrDefault()?.Name ?? e.ToString()
+                });
+
+            return new SelectList(valores, "Value", "Text", selecionado);
         }
 
         // GET: Pagamentoes
@@ -49,12 +69,11 @@ namespace LojaDeTenis.Controllers
         public IActionResult Create()
         {
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id");
+            ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList();
             return View();
         }
 
         // POST: Pagamentoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,PedidoId,Valor,DataPagamento,MetodoPagamento")] Pagamento pagamento)
@@ -65,7 +84,9 @@ namespace LojaDeTenis.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }
 
@@ -82,13 +103,13 @@ namespace LojaDeTenis.Controllers
             {
                 return NotFound();
             }
+
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }
 
         // POST: Pagamentoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,PedidoId,Valor,DataPagamento,MetodoPagamento")] Pagamento pagamento)
@@ -118,7 +139,9 @@ namespace LojaDeTenis.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }
 
@@ -150,19 +173,20 @@ namespace LojaDeTenis.Controllers
             {
                 return Problem("Entity set 'LojaDeTenisContext.Pagamento'  is null.");
             }
+
             var pagamento = await _context.Pagamento.FindAsync(id);
             if (pagamento != null)
             {
                 _context.Pagamento.Remove(pagamento);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PagamentoExists(int id)
         {
-          return (_context.Pagamento?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Pagamento?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

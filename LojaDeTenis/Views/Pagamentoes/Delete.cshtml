@@ -2,6 +2,16 @@
 
 @{
     ViewData["Title"] = "Delete";
+
+    // Função auxiliar para pegar o Display Name do enum
+    string GetDisplayName(Enum value)
+    {
+        var member = value.GetType().GetMember(value.ToString()).FirstOrDefault();
+        var display = member?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                             .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
+                             .FirstOrDefault();
+        return display?.Name ?? value.ToString();
+    }
 }
 
 <h1>Delete</h1>
@@ -11,32 +21,35 @@
     <h4>Pagamento</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Pedido)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Pedido.Id)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Valor)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Valor)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataPagamento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DataPagamento)
         </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.MetodoPagamento)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MetodoPagamento)
+        <dd class="col-sm-10">
+            @GetDisplayName(Model.MetodoPagamento)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |

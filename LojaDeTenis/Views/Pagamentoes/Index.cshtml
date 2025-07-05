@@ -2,6 +2,16 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    // Função auxiliar local para exibir o Display Name do enum
+    string GetDisplayName(Enum value)
+    {
+        var member = value.GetType().GetMember(value.ToString()).FirstOrDefault();
+        var display = member?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                             .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
+                             .FirstOrDefault();
+        return display?.Name ?? value.ToString();
+    }
 }
 
 <h1>Index</h1>
@@ -9,45 +19,47 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Pedido)
+                @Html.DisplayNameFor(model => model.First().Pedido)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Valor)
+                @Html.DisplayNameFor(model => model.First().Valor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataPagamento)
+                @Html.DisplayNameFor(model => model.First().DataPagamento)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MetodoPagamento)
+                @Html.DisplayNameFor(model => model.First().MetodoPagamento)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pedido.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataPagamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MetodoPagamento)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Pedido?.Id
+                </td>
+                <td>
+                    @item.Valor.ToString("C")
+                </td>
+                <td>
+                    @item.DataPagamento.ToShortDateString()
+                </td>
+                <td>
+                    @GetDisplayName(item.MetodoPagamento)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

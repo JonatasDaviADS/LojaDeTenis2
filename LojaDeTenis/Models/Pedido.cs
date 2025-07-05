@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LojaDeTenis.Models
 {
@@ -10,11 +12,13 @@ namespace LojaDeTenis.Models
         [DataType(DataType.Date)]
         public DateTime Data { get; set; }
 
-
         [Required(ErrorMessage = "Cliente obrigatório")]
         public int ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
 
+        // Relacionamento obrigatório com Nota Fiscal
+        [Required(ErrorMessage = "Nota Fiscal obrigatória")]
+        public int NotaFiscalId { get; set; }
         public NotaFiscal? NotaFiscal { get; set; }
 
         [Required(ErrorMessage = "Status obrigatório")]

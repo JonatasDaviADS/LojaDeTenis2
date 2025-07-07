@@ -2,6 +2,13 @@
     Layout = null;
 }
 <!DOCTYPE html>
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-controller="Login" asp-action="Sair" method="post" class="logout-btn-form">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-outline-danger">Sair</button>
+    </form>
+}
 
 <html lang="pt-br" data-theme="light">
 
@@ -12,6 +19,16 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/tema-personalizado.css" />
+
+    <style>
+        .logout-btn-form {
+            position: fixed;
+            bottom: 20px; /* distância da parte inferior */
+            right: 20px; /* distância da borda direita */
+            z-index: 1030; /* garante que fique acima de outros elementos */
+        }
+    </style>
+
 </head>
 
 <body>

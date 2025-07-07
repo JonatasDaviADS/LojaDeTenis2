@@ -25,6 +25,7 @@ namespace LojaDeTenis.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(string email, string senha)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha))
@@ -36,11 +37,12 @@ namespace LojaDeTenis.Controllers
             // Gera o hash da senha digitada
             var senhaHash = GerarHash(senha);
 
-            // Busca o usuário com o email e senha hash
+            // Busca o usuário com o email
             var usuario = await _context.Usuario
-                .FirstOrDefaultAsync(u => u.Email == email && u.SenhaHash == senha);
+                .FirstOrDefaultAsync(u => u.Email == email);
 
-            if (usuario == null || usuario.SenhaHash != senhaHash)
+            // Verifica se usuário existe e a senha bate
+            if (usuario == null || usuario.SenhaHash != senha)
             {
                 ViewBag.Erro = "Usuário ou senha inválidos";
                 return View();
@@ -64,14 +66,16 @@ namespace LojaDeTenis.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
+        // ✅ Método de logout seguro via POST com token antifalsificação
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Sair()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index");
         }
 
-        // Método para gerar hash SHA256 da senha (exemplo simples)
+        // 🔐 Gera hash SHA256 (simples)
         private string GerarHash(string senha)
         {
             using (SHA256 sha256 = SHA256.Create())

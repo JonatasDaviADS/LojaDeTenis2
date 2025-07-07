@@ -42,4 +42,29 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<LojaDeTenisContext>();
+
+        if (!context.Usuario.Any())
+        {
+            context.Usuario.Add(new LojaDeTenis.Models.Usuario
+            {
+                Nome = "Admin",
+                Email = "admin@admin.com",
+                SenhaHash = "123",
+                IsAdmin = true
+            });
+
+            context.SaveChanges();
+            Console.WriteLine("Usuário administrador criado com sucesso.");
+        }
+    }
+}
+
+
+
 app.Run();

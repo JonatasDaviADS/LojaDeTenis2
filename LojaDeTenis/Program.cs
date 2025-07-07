@@ -9,6 +9,13 @@ builder.Services.AddDbContext<LojaDeTenisContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";
+        options.AccessDeniedPath = "/Login/Index";
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,12 +26,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Login/Index";
-        options.AccessDeniedPath = "/Login/Index";
-    });
+
 
 app.UseAuthentication();
 app.UseAuthorization();

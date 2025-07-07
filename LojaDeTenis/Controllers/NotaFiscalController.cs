@@ -54,9 +54,6 @@ namespace LojaDeTenis.Controllers
             return View();
         }
 
-        // POST: NotaFiscal/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,PedidoId,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)
@@ -90,9 +87,6 @@ namespace LojaDeTenis.Controllers
             return View(notaFiscal);
         }
 
-        // POST: NotaFiscal/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,PedidoId,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)

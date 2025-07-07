@@ -1,14 +1,19 @@
-using LojaDeTenis.Data;
+﻿using LojaDeTenis.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<LojaDeTenisContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LojaDeTenisContext") ?? throw new InvalidOperationException("Connection string 'LojaDeTenisContext' not found.")));
+using LojaDeTenis.Helpers;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
+
+// Conexão com o banco de dados
+builder.Services.AddDbContext<LojaDeTenisContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LojaDeTenisContext")
+        ?? throw new InvalidOperationException("Connection string 'LojaDeTenisContext' not found.")));
+
+// MVC
 builder.Services.AddControllersWithViews();
 
+// Autenticação via cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -18,31 +23,28 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Erro customizado em produção
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+// ✅ Ativa autenticação e autorização
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Roteamento padrão
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+// Cria usuário admin na primeira execução
 if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
@@ -55,12 +57,12 @@ if (app.Environment.IsDevelopment())
             {
                 Nome = "Admin",
                 Email = "admin@admin.com",
-                SenhaHash = "123",
+                SenhaHash = CriptografiaHelper.GerarHash("123"),
                 IsAdmin = true
             });
 
             context.SaveChanges();
-            Console.WriteLine("Usu�rio administrador criado com sucesso.");
+            Console.WriteLine("Usuário administrador criado com sucesso.");
         }
     }
 }

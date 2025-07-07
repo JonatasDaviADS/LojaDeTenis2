@@ -50,10 +50,11 @@ namespace LojaDeTenis.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
         public async Task<IActionResult> Sair()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Login");
         }
 
     }

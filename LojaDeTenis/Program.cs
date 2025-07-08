@@ -5,15 +5,15 @@ using LojaDeTenis.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Conexão com o banco de dados
+// ✅ Conexão com o banco de dados
 builder.Services.AddDbContext<LojaDeTenisContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LojaDeTenisContext")
         ?? throw new InvalidOperationException("Connection string 'LojaDeTenisContext' not found.")));
 
-// MVC
+// ✅ MVC
 builder.Services.AddControllersWithViews();
 
-// Autenticação via cookies
+// ✅ Autenticação via cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-// Erro customizado em produção
+// ✅ Erro customizado em produção
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -39,31 +39,32 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Roteamento padrão
+// ✅ Roteamento padrão
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Cria usuário admin na primeira execução
-if (app.Environment.IsDevelopment())
+// ✅ Executa seed do banco (categorias + admin)
+using (var scope = app.Services.CreateScope())
 {
-    using (var scope = app.Services.CreateScope())
+    var context = scope.ServiceProvider.GetRequiredService<LojaDeTenisContext>();
+
+    // Cria categorias iniciais se não existirem
+    SeedData.Inicializar(context);
+
+    // Cria usuário admin se não existir
+    if (!context.Usuario.Any())
     {
-        var context = scope.ServiceProvider.GetRequiredService<LojaDeTenisContext>();
-
-        if (!context.Usuario.Any())
+        context.Usuario.Add(new LojaDeTenis.Models.Usuario
         {
-            context.Usuario.Add(new LojaDeTenis.Models.Usuario
-            {
-                Nome = "Admin",
-                Email = "admin@admin.com",
-                SenhaHash = CriptografiaHelper.GerarHash("123"),
-                IsAdmin = true
-            });
+            Nome = "Admin",
+            Email = "admin@admin.com",
+            SenhaHash = CriptografiaHelper.GerarHash("123"),
+            IsAdmin = true
+        });
 
-            context.SaveChanges();
-            Console.WriteLine("Usuário administrador criado com sucesso.");
-        }
+        context.SaveChanges();
+        Console.WriteLine("Usuário administrador criado com sucesso.");
     }
 }
 

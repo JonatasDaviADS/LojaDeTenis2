@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LojaDeTenis.Data;
 using LojaDeTenis.Models;
@@ -22,25 +21,21 @@ namespace LojaDeTenis.Controllers
         // GET: Categorias
         public async Task<IActionResult> Index()
         {
-              return _context.Categoria != null ? 
-                          View(await _context.Categoria.ToListAsync()) :
-                          Problem("Entity set 'LojaDeTenisContext.Categoria'  is null.");
+            return _context.Categoria != null ?
+                View(await _context.Categoria.ToListAsync()) :
+                Problem("Entity set 'LojaDeTenisContext.Categoria'  is null.");
         }
 
         // GET: Categorias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Categoria == null)
-            {
                 return NotFound();
-            }
 
-            var categoria = await _context.Categoria
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoria = await _context.Categoria.FirstOrDefaultAsync(m => m.Id == id);
+
             if (categoria == null)
-            {
                 return NotFound();
-            }
 
             return View(categoria);
         }
@@ -52,8 +47,6 @@ namespace LojaDeTenis.Controllers
         }
 
         // POST: Categorias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome")] Categoria categoria)
@@ -71,29 +64,23 @@ namespace LojaDeTenis.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Categoria == null)
-            {
                 return NotFound();
-            }
 
             var categoria = await _context.Categoria.FindAsync(id);
+
             if (categoria == null)
-            {
                 return NotFound();
-            }
+
             return View(categoria);
         }
 
         // POST: Categorias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] Categoria categoria)
         {
             if (id != categoria.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -105,13 +92,9 @@ namespace LojaDeTenis.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!CategoriaExists(categoria.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -122,16 +105,12 @@ namespace LojaDeTenis.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Categoria == null)
-            {
                 return NotFound();
-            }
 
-            var categoria = await _context.Categoria
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoria = await _context.Categoria.FirstOrDefaultAsync(m => m.Id == id);
+
             if (categoria == null)
-            {
                 return NotFound();
-            }
 
             return View(categoria);
         }
@@ -142,22 +121,21 @@ namespace LojaDeTenis.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Categoria == null)
-            {
                 return Problem("Entity set 'LojaDeTenisContext.Categoria'  is null.");
-            }
+
             var categoria = await _context.Categoria.FindAsync(id);
             if (categoria != null)
             {
                 _context.Categoria.Remove(categoria);
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoriaExists(int id)
         {
-          return (_context.Categoria?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Categoria?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

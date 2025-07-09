@@ -6,7 +6,8 @@ namespace LojaDeTenis.Models.ViewModels
 {
     public class ProdutoViewModel
     {
-        public Produto Produto { get; set; }
-        public IEnumerable<SelectListItem> Categorias { get; set; }
+        public Produto? Produto { get; set; }
+        public IEnumerable<SelectListItem>? Categoria { get; set; }
+        public List<SelectListItem> Categorias { get; internal set; }
     }
 }

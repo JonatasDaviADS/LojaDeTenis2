@@ -22,19 +22,19 @@ namespace LojaDeTenis.Controllers
         // GET: Estoques
         public async Task<IActionResult> Index()
         {
-            var lojaDeTenisContext = _context.Estoque.Include(e => e.Produto);
+            var lojaDeTenisContext = _context.Estoquee.Include(e => e.Produto);
             return View(await lojaDeTenisContext.ToListAsync());
         }
 
         // GET: Estoques/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Estoque == null)
+            if (id == null || _context.Estoquee == null)
             {
                 return NotFound();
             }
 
-            var estoque = await _context.Estoque
+            var estoque = await _context.Estoquee
                 .Include(e => e.Produto)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (estoque == null)
@@ -72,12 +72,12 @@ namespace LojaDeTenis.Controllers
         // GET: Estoques/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Estoque == null)
+            if (id == null || _context.Estoquee == null)
             {
                 return NotFound();
             }
 
-            var estoque = await _context.Estoque.FindAsync(id);
+            var estoque = await _context.Estoquee.FindAsync(id);
             if (estoque == null)
             {
                 return NotFound();
@@ -125,12 +125,12 @@ namespace LojaDeTenis.Controllers
         // GET: Estoques/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Estoque == null)
+            if (id == null || _context.Estoquee == null)
             {
                 return NotFound();
             }
 
-            var estoque = await _context.Estoque
+            var estoque = await _context.Estoquee
                 .Include(e => e.Produto)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (estoque == null)
@@ -146,14 +146,14 @@ namespace LojaDeTenis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Estoque == null)
+            if (_context.Estoquee == null)
             {
                 return Problem("Entity set 'LojaDeTenisContext.Estoque'  is null.");
             }
-            var estoque = await _context.Estoque.FindAsync(id);
+            var estoque = await _context.Estoquee.FindAsync(id);
             if (estoque != null)
             {
-                _context.Estoque.Remove(estoque);
+                _context.Estoquee.Remove(estoque);
             }
             
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace LojaDeTenis.Controllers
 
         private bool EstoqueExists(int id)
         {
-          return (_context.Estoque?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Estoquee?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

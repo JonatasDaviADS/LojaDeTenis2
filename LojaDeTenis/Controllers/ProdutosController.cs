@@ -65,7 +65,7 @@ namespace LojaDeTenis.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(viewModel.Produto);
+                _ = _context.Add(viewModel.Produto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

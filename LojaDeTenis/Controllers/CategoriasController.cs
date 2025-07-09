@@ -23,7 +23,7 @@ namespace LojaDeTenis.Controllers
         {
             return _context.Categoria != null ?
                 View(await _context.Categoria.ToListAsync()) :
-                Problem("Entity set 'LojaDeTenisContext.Categoria'  is null.");
+                Problem("Entity set 'LojaDeTenisContext.Categorias'  is null.");
         }
 
         // GET: Categorias/Details/5
@@ -33,7 +33,7 @@ namespace LojaDeTenis.Controllers
                 return NotFound();
 
             var categoria = await _context.Categoria.FirstOrDefaultAsync(m => m.Id == id);
-
+                        
             if (categoria == null)
                 return NotFound();
 
@@ -121,7 +121,7 @@ namespace LojaDeTenis.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Categoria == null)
-                return Problem("Entity set 'LojaDeTenisContext.Categoria'  is null.");
+                return Problem("Entity set 'LojaDeTenisContext.Categorias' is null.");
 
             var categoria = await _context.Categoria.FindAsync(id);
             if (categoria != null)
@@ -135,7 +135,7 @@ namespace LojaDeTenis.Controllers
 
         private bool CategoriaExists(int id)
         {
-            return (_context.Categoria?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Categoria?.Any(e => e.Id == id)).GetValueOrDefault(); 
         }
     }
 }

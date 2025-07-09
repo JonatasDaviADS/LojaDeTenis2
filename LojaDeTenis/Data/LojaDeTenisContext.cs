@@ -20,7 +20,7 @@ namespace LojaDeTenis.Data
         public DbSet<Cliente> Cliente { get; set; } = default!;
         public DbSet<Pedido> Pedidos { get; set; } = default!;
         public DbSet<ProdPedi> ProdPedi { get; set; } = default!;
-        public DbSet<Estoque> Estoquee { get; set; } = default!;
+        public DbSet<Estoque> Estoque { get; set; } = default!;
         public DbSet<Usuario> Usuario { get; set; } = default!;
         public DbSet<NotaFiscal> NotaFiscail { get; set; } = default!;
         public DbSet<Pagamento> Pagamento { get; set; } = default!;

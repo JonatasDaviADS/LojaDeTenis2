@@ -27,6 +27,12 @@ namespace LojaDeTenis.Models
         public decimal ValorTotal { get; set; }
 
 
+        [Required(ErrorMessage = "O produto é obrigatório")]
+        public int ProdutoId { get; set; }
+        public Produto? Produto { get; set; }
+
+
+
         [Required(ErrorMessage = "O pedido é obrigatório")]
         public int PedidoId { get; set; }
         public Pedido? Pedido { get; set; }

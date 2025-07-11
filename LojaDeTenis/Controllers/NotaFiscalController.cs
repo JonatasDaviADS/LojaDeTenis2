@@ -155,14 +155,14 @@ namespace LojaDeTenis.Controllers
             {
                 _context.NotaFiscal.Remove(notaFiscal);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool NotaFiscalExists(int id)
         {
-          return (_context.NotaFiscal?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.NotaFiscal?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

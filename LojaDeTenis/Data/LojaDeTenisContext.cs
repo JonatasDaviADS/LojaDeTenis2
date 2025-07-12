@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LojaDeTenis.Models;
-using LojaDeTenis.Data;
-
+using System.Collections;
 
 namespace LojaDeTenis.Data
 {
     public class LojaDeTenisContext : DbContext
     {
-        public LojaDeTenisContext (DbContextOptions<LojaDeTenisContext> options)
+        public LojaDeTenisContext(DbContextOptions<LojaDeTenisContext> options)
             : base(options)
         {
         }
 
-
-        public DbSet<LojaDeTenis.Models.Categoria> Categoria { get; set; } = default!;
-        // public DbSet<Pedido> Pedidos { get; set; }
-        public DbSet<LojaDeTenis.Models.Produto> Produto { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.Cliente> Cliente { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.Pedido> Pedido { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.ProdPedi> ProdPedi { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.Estoque> Estoque { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.Usuario> Usuario { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.NotaFiscal> NotaFiscal { get; set; } = default!;
-        public DbSet<LojaDeTenis.Models.Pagamento> Pagamento { get; set; } = default!;
+        // DbSets representando tabelas no banco, nomes no plural
+        public DbSet<Categoria> Categoria { get; set; } = default!;
+        public DbSet<Produto> Produto { get; set; } = default!;
+        public DbSet<Cliente> Cliente { get; set; } = default!;
+        public DbSet<Pedido> Pedidos { get; set; } = default!;
+        public DbSet<ProdPedi> ProdPedi { get; set; } = default!;
+        public DbSet<Estoque> Estoque { get; set; } = default!;
+        public DbSet<Usuario> Usuario { get; set; } = default!;
+        public DbSet<NotaFiscal> NotaFiscail { get; set; } = default!;
+        public DbSet<Pagamento> Pagamento { get; set; } = default!;
+        public object NotaFiscal { get; internal set; }
+        public IEnumerable Clientes { get; internal set; }
+        public IEnumerable Categorias { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Evita conflito de deleção em cascata entre NotaFiscal -> Pedido e NotaFiscal -> Cliente
+            // Configuração relacionamento NotaFiscal <-> Pedido
             modelBuilder.Entity<NotaFiscal>()
                 .HasOne(n => n.Pedido)
                 .WithOne(p => p.NotaFiscal)
                 .HasForeignKey<NotaFiscal>(n => n.PedidoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Configuração relacionamento NotaFiscal <-> Cliente
             modelBuilder.Entity<NotaFiscal>()
                 .HasOne(n => n.Cliente)
                 .WithMany()
@@ -46,5 +47,25 @@ namespace LojaDeTenis.Data
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-    
+
+    // Classe estática para popular dados iniciais
+    public static class SeedData
+    {
+        public static void Inicializar(LojaDeTenisContext context)
+        {
+            if (context.Categoria.Any())
+                return; // Já existem categorias
+
+            var categoriasIniciais = new List<Categoria>
+            {
+                new Categoria { Nome = "Tênis Casual" },
+                new Categoria { Nome = "Tênis Esportivo" },
+                new Categoria { Nome = "Tênis de Corrida" },
+                new Categoria { Nome = "Tênis Infantil" }
+            };
+
+            context.Categoria.AddRange(categoriasIniciais);
+            context.SaveChanges();
+        }
     }
+}

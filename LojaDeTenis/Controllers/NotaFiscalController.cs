@@ -19,14 +19,19 @@ namespace LojaDeTenis.Controllers
             _context = context;
         }
 
-        // GET: NotaFiscal
+        // Fix for CS1061: Ensure the correct property type is used for _context.NotaFiscal
         public async Task<IActionResult> Index()
         {
-            var lojaDeTenisContext = _context.NotaFiscal.Include(n => n.Cliente).Include(n => n.Pedido);
-            return View(await lojaDeTenisContext.ToListAsync());
+            var lojaDeTenisContext = _context.NotaFiscal as DbSet<NotaFiscal>;
+            if (lojaDeTenisContext == null)
+            {
+                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal' is not properly configured.");
+            }
+
+            var notaFiscalList = lojaDeTenisContext.Include(n => n.Cliente).Include(n => n.Pedido);
+            return View(await notaFiscalList.ToListAsync());
         }
 
-        // GET: NotaFiscal/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.NotaFiscal == null)
@@ -34,10 +39,17 @@ namespace LojaDeTenis.Controllers
                 return NotFound();
             }
 
-            var notaFiscal = await _context.NotaFiscal
+            var lojaDeTenisContext = _context.NotaFiscal as DbSet<NotaFiscal>;
+            if (lojaDeTenisContext == null)
+            {
+                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal' is not properly configured.");
+            }
+
+            var notaFiscal = await lojaDeTenisContext
                 .Include(n => n.Cliente)
                 .Include(n => n.Pedido)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (notaFiscal == null)
             {
                 return NotFound();
@@ -45,6 +57,7 @@ namespace LojaDeTenis.Controllers
 
             return View(notaFiscal);
         }
+<<<<<<< HEAD
 
         // GET: NotaFiscal/Create
         public IActionResult Create()
@@ -164,5 +177,6 @@ namespace LojaDeTenis.Controllers
         {
             return (_context.NotaFiscal?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
     }
 }

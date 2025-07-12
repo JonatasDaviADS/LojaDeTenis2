@@ -49,7 +49,7 @@ namespace LojaDeTenis.Controllers
         // GET: ProdPedi/Create
         public IActionResult Create()
         {
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id");
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id");
             ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id");
             return View();
         }
@@ -67,7 +67,7 @@ namespace LojaDeTenis.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", prodPedi.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", prodPedi.PedidoId);
             ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", prodPedi.ProdutoId);
             return View(prodPedi);
         }
@@ -85,7 +85,7 @@ namespace LojaDeTenis.Controllers
             {
                 return NotFound();
             }
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", prodPedi.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", prodPedi.PedidoId);
             ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", prodPedi.ProdutoId);
             return View(prodPedi);
         }
@@ -122,7 +122,7 @@ namespace LojaDeTenis.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", prodPedi.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", prodPedi.PedidoId);
             ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", prodPedi.ProdutoId);
             return View(prodPedi);
         }

@@ -4,6 +4,7 @@ using LojaDeTenis.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LojaDeTenis.Migrations
 {
     [DbContext(typeof(LojaDeTenisContext))]
-    partial class LojaDeTenisContextModelSnapshot : ModelSnapshot
+    [Migration("20250709203109_CorrigirNomeEstoque")]
+    partial class CorrigirNomeEstoque
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +119,6 @@ namespace LojaDeTenis.Migrations
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Serie")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -143,13 +142,7 @@ namespace LojaDeTenis.Migrations
                     b.HasIndex("PedidoId")
                         .IsUnique();
 
-<<<<<<< HEAD
-                    b.HasIndex("ProdutoId");
-
-                    b.ToTable("NotaFiscal");
-=======
-                    
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
+                    b.ToTable("NotaFiscail");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Pagamento", b =>
@@ -196,12 +189,9 @@ namespace LojaDeTenis.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-=======
                     b.Property<int?>("NotaFiscalId")
                         .HasColumnType("int");
 
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -333,17 +323,9 @@ namespace LojaDeTenis.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LojaDeTenis.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cliente");
 
                     b.Navigation("Pedido");
-
-                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Pagamento", b =>
@@ -418,14 +400,7 @@ namespace LojaDeTenis.Migrations
 
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
-<<<<<<< HEAD
-                    b.Navigation("NotaFiscal")
-                        .IsRequired();
-
-                    b.Navigation("ProdutosPedidos");
-=======
                     b.Navigation("NotaFiscal");
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
                 });
 #pragma warning restore 612, 618
         }

@@ -68,7 +68,7 @@ namespace LojaDeTenis.Controllers
         // GET: Pagamentoes/Create
         public IActionResult Create()
         {
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id");
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id");
             ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList();
             return View();
         }
@@ -85,7 +85,7 @@ namespace LojaDeTenis.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", pagamento.PedidoId);
             ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }
@@ -104,7 +104,7 @@ namespace LojaDeTenis.Controllers
                 return NotFound();
             }
 
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", pagamento.PedidoId);
             ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }
@@ -140,7 +140,7 @@ namespace LojaDeTenis.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", pagamento.PedidoId);
+            ViewData["PedidoId"] = new SelectList(_context.ProdPedi, "Id", "Id", pagamento.PedidoId);
             ViewData["MetodoPagamento"] = ObterMetodosPagamentoSelectList(pagamento.MetodoPagamento);
             return View(pagamento);
         }

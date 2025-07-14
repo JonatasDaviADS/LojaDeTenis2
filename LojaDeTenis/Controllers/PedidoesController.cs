@@ -18,8 +18,8 @@ namespace LojaDeTenis.Controllers
         // GET: Pedidos/Create
         public IActionResult Create()
         {
-            ViewBag.Clientes = new SelectList(_context.Clientes, "Id", "Nome");
-            ViewBag.Categorias = new SelectList(_context.Categorias, "Id", "Nome");
+            ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome");
+            ViewBag.Categoria = new SelectList(_context.Categoria, "Id", "Nome");
             return View();
         }
 
@@ -35,8 +35,8 @@ namespace LojaDeTenis.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Clientes = new SelectList(_context.Clientes, "Id", "Nome", pedido.ClienteId);
-            ViewBag.Categorias = new SelectList(_context.Categorias, "Id", "Nome", pedido.CategoriaId);
+            ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome", pedido.ClienteId);
+            // ViewBag.Categoria = new SelectList(_context.Categoria, "Id", "Nome", pedido.CategoriaId);
             return View(pedido);
         }
 

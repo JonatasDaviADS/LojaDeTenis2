@@ -22,6 +22,6 @@ namespace LojaDeTenis.Models
         public string? Endereco { get; set; }
 
         // Relacionamento
-        public ICollection<Pedido> Pedidos { get; set; }
+        public ICollection<Pedido>? Pedidos { get; set; }
     }
 }

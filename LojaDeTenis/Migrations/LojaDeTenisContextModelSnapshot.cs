@@ -143,13 +143,10 @@ namespace LojaDeTenis.Migrations
                     b.HasIndex("PedidoId")
                         .IsUnique();
 
-<<<<<<< HEAD
+
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("NotaFiscal");
-=======
-                    
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Pagamento", b =>
@@ -196,12 +193,12 @@ namespace LojaDeTenis.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-=======
+
+
                     b.Property<int?>("NotaFiscalId")
                         .HasColumnType("int");
 
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -418,16 +415,15 @@ namespace LojaDeTenis.Migrations
 
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
-<<<<<<< HEAD
+
                     b.Navigation("NotaFiscal")
                         .IsRequired();
 
                     b.Navigation("ProdutosPedidos");
-=======
+
                     b.Navigation("NotaFiscal");
->>>>>>> 287119faff8581c361860bec9a97454df82423b2
                 });
-#pragma warning restore 612, 618
+
         }
     }
 }

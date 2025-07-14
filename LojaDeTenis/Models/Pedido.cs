@@ -15,16 +15,20 @@ namespace LojaDeTenis.Models
         public int ClienteId { get; set; }
 
         [Display(Name = "Categoria")]
-        public int CategoriaId { get; set; }
+        // public int CategoriaId { get; set; }
 
         [Required]
         public string Status { get; set; } = string.Empty; // propriedade com inicialização para evitar warnings
 
         // Relacionamentos
         public Cliente Cliente { get; set; } = null!;  // null-forgiving para indicar que será preenchido
-        public Categoria Categoria { get; set; } = null!;
+        // public Categoria Categoria { get; set; } = null!;
 
         public int? NotaFiscalId { get; set; }
         public NotaFiscal? NotaFiscal { get; set; }
+
+        public ICollection<ProdPedi> ProdutosPedidos { get; set; } = new List<ProdPedi>();
+
+
     }
 }

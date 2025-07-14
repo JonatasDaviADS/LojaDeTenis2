@@ -18,15 +18,12 @@ namespace LojaDeTenis.Data
         public DbSet<Categoria> Categoria { get; set; } = default!;
         public DbSet<Produto> Produto { get; set; } = default!;
         public DbSet<Cliente> Cliente { get; set; } = default!;
-        public DbSet<Pedido> Pedidos { get; set; } = default!;
+        public DbSet<Pedido> Pedido { get; set; } = default!;
         public DbSet<ProdPedi> ProdPedi { get; set; } = default!;
         public DbSet<Estoque> Estoque { get; set; } = default!;
         public DbSet<Usuario> Usuario { get; set; } = default!;
-        public DbSet<NotaFiscal> NotaFiscail { get; set; } = default!;
+        public DbSet<NotaFiscal> NotaFiscal { get; set; } = default!;
         public DbSet<Pagamento> Pagamento { get; set; } = default!;
-        public object NotaFiscal { get; internal set; }
-        public IEnumerable Clientes { get; internal set; }
-        public IEnumerable Categorias { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +42,33 @@ namespace LojaDeTenis.Data
                 .WithMany()
                 .HasForeignKey(n => n.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Produto>()
+                .HasOne(p => p.Categoria)
+                .WithMany()
+                .HasForeignKey(p => p.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProdPedi>()
+            .HasKey(pp => pp.Id); // chave primária
+
+            modelBuilder.Entity<ProdPedi>()
+                .HasOne(pp => pp.Pedido)
+                .WithMany(p => p.ProdutosPedidos)
+                .HasForeignKey(pp => pp.PedidoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProdPedi>()
+                .HasOne(pp => pp.Produto)
+                .WithMany()
+                .HasForeignKey(pp => pp.ProdutoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Pedido>()
+                .HasMany(p => p.ProdutosPedidos)
+                .WithOne(pp => pp.Pedido)
+                .HasForeignKey(pp => pp.PedidoId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

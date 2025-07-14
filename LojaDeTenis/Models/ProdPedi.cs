@@ -15,7 +15,7 @@ namespace LojaDeTenis.Models
 
         [Required(ErrorMessage = "Pedido obrigatório")]
         public int PedidoId { get; set; }
-        public Pedido? Pedido { get; set; }
+        public Pedido? Pedido { get; set; } = null!;
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantidade mínima é 1")]
         public int Quantidade { get; set; }

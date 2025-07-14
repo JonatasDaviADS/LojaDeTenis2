@@ -19,19 +19,19 @@ namespace LojaDeTenis.Controllers
             _context = context;
         }
 
-        // Fix for CS1061: Ensure the correct property type is used for _context.NotaFiscal
+        // Lista todas as notas fiscais com cliente e pedido incluídos
         public async Task<IActionResult> Index()
         {
-            var lojaDeTenisContext = _context.NotaFiscal as DbSet<NotaFiscal>;
-            if (lojaDeTenisContext == null)
-            {
-                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal' is not properly configured.");
-            }
+            var notaFiscal = await _context.NotaFiscal
+                .Include(n => n.Cliente)
+                .Include(n => n.Pedido)
+                .ToListAsync();
 
-            var notaFiscalList = lojaDeTenisContext.Include(n => n.Cliente).Include(n => n.Pedido);
-            return View(await notaFiscalList.ToListAsync());
+            return View(notaFiscal);
         }
 
+
+        // Exibe os detalhes de uma nota fiscal específica
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.NotaFiscal == null)
@@ -39,16 +39,10 @@ namespace LojaDeTenis.Controllers
                 return NotFound();
             }
 
-            var lojaDeTenisContext = _context.NotaFiscal as DbSet<NotaFiscal>;
-            if (lojaDeTenisContext == null)
-            {
-                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal' is not properly configured.");
-            }
-
-            var notaFiscal = await lojaDeTenisContext
+            var notaFiscal = await _context.NotaFiscal
                 .Include(n => n.Cliente)
                 .Include(n => n.Pedido)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(n => n.Id == id);
 
             if (notaFiscal == null)
             {
@@ -57,9 +51,8 @@ namespace LojaDeTenis.Controllers
 
             return View(notaFiscal);
         }
-<<<<<<< HEAD
 
-        // GET: NotaFiscal/Create
+        // Carrega a view de criação de nova nota fiscal
         public IActionResult Create()
         {
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id");
@@ -67,6 +60,7 @@ namespace LojaDeTenis.Controllers
             return View();
         }
 
+        // Recebe os dados da nova nota fiscal e salva no banco
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,PedidoId,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)
@@ -77,12 +71,13 @@ namespace LojaDeTenis.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaFiscal.ClienteId);
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", notaFiscal.PedidoId);
             return View(notaFiscal);
         }
 
-        // GET: NotaFiscal/Edit/5
+        // Carrega os dados de uma nota fiscal para edição
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.NotaFiscal == null)
@@ -95,11 +90,13 @@ namespace LojaDeTenis.Controllers
             {
                 return NotFound();
             }
+
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaFiscal.ClienteId);
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", notaFiscal.PedidoId);
             return View(notaFiscal);
         }
 
+        // Recebe os dados atualizados da nota fiscal e salva as alterações
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,PedidoId,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)
@@ -127,14 +124,16 @@ namespace LojaDeTenis.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", notaFiscal.ClienteId);
             ViewData["PedidoId"] = new SelectList(_context.Pedido, "Id", "Id", notaFiscal.PedidoId);
             return View(notaFiscal);
         }
 
-        // GET: NotaFiscal/Delete/5
+        // Carrega a confirmação de exclusão de uma nota fiscal
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.NotaFiscal == null)
@@ -145,7 +144,8 @@ namespace LojaDeTenis.Controllers
             var notaFiscal = await _context.NotaFiscal
                 .Include(n => n.Cliente)
                 .Include(n => n.Pedido)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(n => n.Id == id);
+
             if (notaFiscal == null)
             {
                 return NotFound();
@@ -154,15 +154,16 @@ namespace LojaDeTenis.Controllers
             return View(notaFiscal);
         }
 
-        // POST: NotaFiscal/Delete/5
+        // Exclui a nota fiscal após confirmação
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.NotaFiscal == null)
             {
-                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal'  is null.");
+                return Problem("Entity set 'LojaDeTenisContext.NotaFiscal' está nulo.");
             }
+
             var notaFiscal = await _context.NotaFiscal.FindAsync(id);
             if (notaFiscal != null)
             {
@@ -173,10 +174,10 @@ namespace LojaDeTenis.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Verifica se uma nota fiscal existe no banco
         private bool NotaFiscalExists(int id)
         {
-            return (_context.NotaFiscal?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.NotaFiscal?.Any(e => e.Id == id) ?? false;
         }
-
     }
 }

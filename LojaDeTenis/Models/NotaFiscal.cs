@@ -21,23 +21,17 @@ namespace LojaDeTenis.Models
         [Required(ErrorMessage = "A data de emissão é obrigatória")]
         public DateTime DataEmissao { get; set; }
 
-
         [Required(ErrorMessage = "O valor total é obrigatório")]
         [Range(0.01, 100000, ErrorMessage = "O valor deve estar entre R$0,01 e R$100.000,00")]
         public decimal ValorTotal { get; set; }
 
-
-        [Required(ErrorMessage = "O produto é obrigatório")]
-        public int ProdutoId { get; set; }
-        public Produto? Produto { get; set; }
-
-
+        //[Required(ErrorMessage = "O produto é obrigatório")]
+        //public int ProdutoId { get; set; }
+        //public Produto? Produto { get; set; }
 
         [Required(ErrorMessage = "O pedido é obrigatório")]
         public int PedidoId { get; set; }
         public Pedido? Pedido { get; set; }
-
-
 
         [Required(ErrorMessage = "O cliente é obrigatório")]
         public int ClienteId { get; set; }

@@ -63,7 +63,7 @@ namespace LojaDeTenis.Controllers
         // Recebe os dados da nova nota fiscal e salva no banco
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,PedidoId,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)
+        public async Task<IActionResult> Create([Bind("Id,Numero,Serie,ChaveAcesso,DataEmissao,ValorTotal,ClienteId,XmlNotaFiscal,Status")] NotaFiscal notaFiscal)
         {
             if (ModelState.IsValid)
             {

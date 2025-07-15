@@ -17,10 +17,11 @@ namespace LojaDeTenis.Controllers
         }
 
         // GET: Pedidos/Create
+
         public IActionResult Create()
         {
-            //ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome");
-            //return View();
+            ViewBag.Clientes = new SelectList(_context.Cliente, "Id", "Nome");
+            return View(new Pedido());
 
             ListaProdutosViewModels ListaProdutos = new ListaProdutosViewModels
             {
@@ -29,21 +30,73 @@ namespace LojaDeTenis.Controllers
             return View(ListaProdutos);
         }
 
+        //public IActionResult Create()
+        //{
+        //    //ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome");
+        //    //return View();
+
+        //    ListaProdutosViewModels ListaProdutos = new ListaProdutosViewModels
+        //    {
+        //        Produtos = _context.Produto.ToList()
+        //    };
+        //    return View(ListaProdutos);
+        //}
+
+        // GET: Pedidos
+        public async Task<IActionResult> Index()
+        {
+            var pedidos = await _context.Pedido
+                .Include(p => p.Cliente)
+                .ToListAsync();
+
+            return View(pedidos);
+        }
+
         // POST: Pedidos/Create
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create(ListaProdutosViewModels model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Pedido.Add(model.Pedido);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    model.Produtos = _context.Produto.ToList();
+        //    ViewBag.Clientes = new SelectList(_context.Cliente, "Id", "Nome", model.Pedido.ClienteId);
+        //    return View(model);
+        //}
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Data,ClienteId,CategoriaId,Status")] Pedido pedido)
+        public async Task<IActionResult> Create([Bind("Id,Data,ClienteId,Status")] Pedido pedido)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(pedido);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                return RedirectToAction(nameof(Index));           
 
-            ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome", pedido.ClienteId);
-            return View(pedido);
+            
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,Data,ClienteId,CategoriaId,Status")] Pedido pedido)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(pedido);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome", pedido.ClienteId);
+        //    return View(pedido);
+        //}
 
         // Outros métodos como Index, Details, Edit, Delete, etc...
     }

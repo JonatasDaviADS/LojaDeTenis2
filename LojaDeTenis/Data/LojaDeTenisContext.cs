@@ -28,12 +28,12 @@ namespace LojaDeTenis.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuração relacionamento NotaFiscal <-> Pedido
-            modelBuilder.Entity<NotaFiscal>()
-                .HasOne(n => n.Pedido)
-                .WithOne(p => p.NotaFiscal)
-                .HasForeignKey<NotaFiscal>(n => n.PedidoId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //// Configuração relacionamento NotaFiscal <-> Pedido
+            //modelBuilder.Entity<NotaFiscal>()
+            //    .HasOne(n => n.Pedido)
+            //    .WithOne(p => p.NotaFiscal)
+            //    .HasForeignKey<NotaFiscal>(n => n.PedidoId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             // Configuração relacionamento NotaFiscal <-> Cliente
             modelBuilder.Entity<NotaFiscal>()

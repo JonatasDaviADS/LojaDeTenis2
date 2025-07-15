@@ -14,8 +14,7 @@ namespace LojaDeTenis.Data
         {
         }
 
-        // DbSets representando tabelas no banco, nomes no plural
-        public DbSet<Categoria> Categoria { get; set; } = default!;
+        // DbSets representando tabelas no banco, nomes no plural        
         public DbSet<Produto> Produto { get; set; } = default!;
         public DbSet<Cliente> Cliente { get; set; } = default!;
         public DbSet<Pedido> Pedido { get; set; } = default!;
@@ -41,12 +40,6 @@ namespace LojaDeTenis.Data
                 .HasOne(n => n.Cliente)
                 .WithMany()
                 .HasForeignKey(n => n.ClienteId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Produto>()
-                .HasOne(p => p.Categoria)
-                .WithMany()
-                .HasForeignKey(p => p.CategoriaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ProdPedi>()
@@ -76,19 +69,7 @@ namespace LojaDeTenis.Data
     public static class SeedData
     {
         public static void Inicializar(LojaDeTenisContext context)
-        {
-            if (context.Categoria.Any())
-                return; // Já existem categorias
-
-            var categoriasIniciais = new List<Categoria>
-            {
-                new Categoria { Nome = "Tênis Casual" },
-                new Categoria { Nome = "Tênis Esportivo" },
-                new Categoria { Nome = "Tênis de Corrida" },
-                new Categoria { Nome = "Tênis Infantil" }
-            };
-
-            context.Categoria.AddRange(categoriasIniciais);
+        {            
             context.SaveChanges();
         }
     }

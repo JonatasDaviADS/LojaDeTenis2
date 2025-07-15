@@ -16,15 +16,13 @@ namespace LojaDeTenis.Models
 
         [Required(ErrorMessage = "Preço obrigatório")]
         [Range(0.01, 100000, ErrorMessage = "Preço deve estar entre R$0,01 e R$100.000")]
+
+        //public Estoque Estoque { get; set; }
+
         public decimal Preco { get; set; }
 
         [Required(ErrorMessage = "Imagem obrigatória")]
-        public string? ImagemUrl { get; set; }
-
-        [Required(ErrorMessage = "Categoria obrigatória")]
-        public int CategoriaId { get; set; } // FK
-
-        [ForeignKey("CategoriaId")]
-        public Categoria? Categoria { get; set; } // Navegação
+        public string? ImagemUrl { get; set; }   
+                
     }
 }

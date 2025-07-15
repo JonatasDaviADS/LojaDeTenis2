@@ -22,24 +22,6 @@ namespace LojaDeTenis.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("LojaDeTenis.Models.Categoria", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categoria");
-                });
-
             modelBuilder.Entity("LojaDeTenis.Models.Cliente", b =>
                 {
                     b.Property<int>("Id")
@@ -143,7 +125,6 @@ namespace LojaDeTenis.Migrations
                     b.HasIndex("PedidoId")
                         .IsUnique();
 
-
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("NotaFiscal");
@@ -184,20 +165,14 @@ namespace LojaDeTenis.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-
-
                     b.Property<int?>("NotaFiscalId")
                         .HasColumnType("int");
-
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -205,11 +180,9 @@ namespace LojaDeTenis.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriaId");
-
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Pedidos");
+                    b.ToTable("Pedido");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.ProdPedi", b =>
@@ -249,9 +222,6 @@ namespace LojaDeTenis.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -269,8 +239,6 @@ namespace LojaDeTenis.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoriaId");
 
                     b.ToTable("Produto");
                 });
@@ -356,19 +324,11 @@ namespace LojaDeTenis.Migrations
 
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
-                    b.HasOne("LojaDeTenis.Models.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LojaDeTenis.Models.Cliente", "Cliente")
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Categoria");
 
                     b.Navigation("Cliente");
                 });
@@ -376,7 +336,7 @@ namespace LojaDeTenis.Migrations
             modelBuilder.Entity("LojaDeTenis.Models.ProdPedi", b =>
                 {
                     b.HasOne("LojaDeTenis.Models.Pedido", "Pedido")
-                        .WithMany()
+                        .WithMany("ProdutosPedidos")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -384,28 +344,12 @@ namespace LojaDeTenis.Migrations
                     b.HasOne("LojaDeTenis.Models.Produto", "Produto")
                         .WithMany()
                         .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pedido");
 
                     b.Navigation("Produto");
-                });
-
-            modelBuilder.Entity("LojaDeTenis.Models.Produto", b =>
-                {
-                    b.HasOne("LojaDeTenis.Models.Categoria", "Categoria")
-                        .WithMany("Produtos")
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categoria");
-                });
-
-            modelBuilder.Entity("LojaDeTenis.Models.Categoria", b =>
-                {
-                    b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Cliente", b =>
@@ -415,15 +359,11 @@ namespace LojaDeTenis.Migrations
 
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
-
-                    b.Navigation("NotaFiscal")
-                        .IsRequired();
+                    b.Navigation("NotaFiscal");
 
                     b.Navigation("ProdutosPedidos");
-
-                    b.Navigation("NotaFiscal");
                 });
-
+#pragma warning restore 612, 618
         }
     }
 }

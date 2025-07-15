@@ -14,9 +14,6 @@ namespace LojaDeTenis.Models
         [Display(Name = "Cliente")]
         public int ClienteId { get; set; }
 
-        [Display(Name = "Categoria")]
-        // public int CategoriaId { get; set; }
-
         [Required]
         public string Status { get; set; } = string.Empty; // propriedade com inicialização para evitar warnings
 

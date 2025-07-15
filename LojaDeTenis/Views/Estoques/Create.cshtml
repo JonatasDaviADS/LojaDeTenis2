@@ -1,8 +1,8 @@
-﻿@model LojaDeTenis.Models.Estoque
+﻿@model LojaDeTenis.Models.ViewModels.EstoqueViewModel
 
-@{
+@* @{
     ViewData["Title"] = "Create";
-}
+} *@
 
 <h1>Create</h1>
 
@@ -13,19 +13,21 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProdutoId" class="control-label"></label>
-                <select asp-for="ProdutoId" class ="form-control" asp-items="ViewBag.ProdutoId"></select>
+                <label asp-for="Estoque.ProdutoId" class="control-label"></label>
+                <select asp-for="Estoque.ProdutoId" class ="form-control" asp-items="@(new SelectList(Model.Produtos, "Id", "Nome"))"></select>
+            </div> 
+
+            <div class="form-group">
+                <label asp-for="Estoque.Quantidade" class="control-label"></label>
+                <input asp-for="Estoque.Quantidade" class="form-control" />
+                <span asp-validation-for="Estoque.Quantidade" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Quantidade" class="control-label"></label>
-                <input asp-for="Quantidade" class="form-control" />
-                <span asp-validation-for="Quantidade" class="text-danger"></span>
+                <label asp-for="Estoque.DataReabastecimento" class="control-label"></label>
+                <input asp-for="Estoque.DataReabastecimento" class="form-control" />
+                <span asp-validation-for="Estoque.DataReabastecimento" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DataReabastecimento" class="control-label"></label>
-                <input asp-for="DataReabastecimento" class="form-control" />
-                <span asp-validation-for="DataReabastecimento" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

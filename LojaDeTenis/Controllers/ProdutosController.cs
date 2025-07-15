@@ -22,7 +22,7 @@ namespace LojaDeTenis.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var lojaDeTenisContext = _context.Produto.Include(p => p.Categoria);
+            var lojaDeTenisContext = _context.Produto;
             return View(await lojaDeTenisContext.ToListAsync());
         }
 
@@ -31,8 +31,7 @@ namespace LojaDeTenis.Controllers
             if (id == null || _context.Produto == null)
                 return NotFound();
 
-            var produto = await _context.Produto
-                .Include(p => p.Categoria)
+            var produto = await _context.Produto                
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (produto == null)
@@ -46,13 +45,7 @@ namespace LojaDeTenis.Controllers
         {
             var viewModel = new ProdutoViewModel
             {
-                Produto = new Produto(),
-                Categorias = _context.Categoria
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = c.Nome
-                    }).ToList()
+                Produto = new Produto() 
             };
 
             return View(viewModel);
@@ -60,26 +53,7 @@ namespace LojaDeTenis.Controllers
 
         // POST: Produtos/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProdutoViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                _ = _context.Add(viewModel.Produto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            // Recarregar categorias caso tenha erro
-            viewModel.Categorias = _context.Categoria
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Nome
-                }).ToList();
-
-            return View(viewModel);
-        }
+        [ValidateAntiForgeryToken]        
 
         // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -93,14 +67,24 @@ namespace LojaDeTenis.Controllers
 
             var viewModel = new ProdutoViewModel
             {
-                Produto = produto,
-                Categorias = _context.Categoria
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = c.Nome
-                    }).ToList()
+                Produto = produto
             };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ProdutoViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                _ = _context.Add(viewModel.Produto);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Recarregar categorias caso tenha erro
 
             return View(viewModel);
         }
@@ -108,45 +92,13 @@ namespace LojaDeTenis.Controllers
         // POST: Produtos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ProdutoViewModel viewModel)
-        {
-            if (id != viewModel.Produto.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(viewModel.Produto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProdutoExists(viewModel.Produto.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-
-            viewModel.Categorias = _context.Categoria
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Nome
-                }).ToList();
-
-            return View(viewModel);
-        }
 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Produto == null)
                 return NotFound();
 
-            var produto = await _context.Produto
-                .Include(p => p.Categoria)
+            var produto = await _context.Produto                
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (produto == null)

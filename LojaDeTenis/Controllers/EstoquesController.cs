@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LojaDeTenis.Data;
 using LojaDeTenis.Models;
+using LojaDeTenis.Models.ViewModels;
 
 namespace LojaDeTenis.Controllers
 {
@@ -48,8 +49,13 @@ namespace LojaDeTenis.Controllers
         // GET: Estoques/Create
         public IActionResult Create()
         {
-            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id");
-            return View();
+            // ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "id");
+
+            EstoqueViewModel estoqueViewModel = new EstoqueViewModel
+            {
+                Produtos = _context.Produto.ToList()
+            };
+            return View(estoqueViewModel);
         }
 
         // POST: Estoques/Create
@@ -82,8 +88,13 @@ namespace LojaDeTenis.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProdutoId"] = new SelectList(_context.Produto, "Id", "Id", estoque.ProdutoId);
-            return View(estoque);
+
+            EstoqueViewModel estoqueViewModel = new EstoqueViewModel
+            {
+                Estoque = estoque,
+                Produtos = _context.Produto.ToList()
+            };
+            return View(estoqueViewModel);
         }
 
         // POST: Estoques/Edit/5

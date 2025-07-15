@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LojaDeTenis.Data;
+using LojaDeTenis.Models;
+using LojaDeTenis.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using LojaDeTenis.Data;
-using LojaDeTenis.Models;
 
 namespace LojaDeTenis.Controllers
 {
@@ -18,9 +19,14 @@ namespace LojaDeTenis.Controllers
         // GET: Pedidos/Create
         public IActionResult Create()
         {
-            ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome");
-            ViewBag.Categoria = new SelectList(_context.Categoria, "Id", "Nome");
-            return View();
+            //ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome");
+            //return View();
+
+            ListaProdutosViewModels ListaProdutos = new ListaProdutosViewModels
+            {
+                Produtos = _context.Produto.ToList()
+            };
+            return View(ListaProdutos);
         }
 
         // POST: Pedidos/Create
@@ -36,7 +42,6 @@ namespace LojaDeTenis.Controllers
             }
 
             ViewBag.Cliente = new SelectList(_context.Cliente, "Id", "Nome", pedido.ClienteId);
-            // ViewBag.Categoria = new SelectList(_context.Categoria, "Id", "Nome", pedido.CategoriaId);
             return View(pedido);
         }
 

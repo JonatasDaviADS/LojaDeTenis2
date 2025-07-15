@@ -9,7 +9,6 @@ namespace LojaDeTenis.Models
         public int ProdutoId { get; set; }
         public Produto? Produto { get; set; }
 
-
         [Required(ErrorMessage = "A quantidade é obrigatória")]
         [Range(0, 10000, ErrorMessage = "A quantidade deve ser entre 0 e 10.000")]
         public int Quantidade { get; set; }

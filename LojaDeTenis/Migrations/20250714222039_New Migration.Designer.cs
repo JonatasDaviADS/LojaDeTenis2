@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LojaDeTenis.Migrations
 {
     [DbContext(typeof(LojaDeTenisContext))]
-    [Migration("20250709203109_CorrigirNomeEstoque")]
-    partial class CorrigirNomeEstoque
+    [Migration("20250714222039_New Migration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,24 +23,6 @@ namespace LojaDeTenis.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("LojaDeTenis.Models.Categoria", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categoria");
-                });
 
             modelBuilder.Entity("LojaDeTenis.Models.Cliente", b =>
                 {
@@ -119,6 +101,9 @@ namespace LojaDeTenis.Migrations
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Serie")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -142,7 +127,9 @@ namespace LojaDeTenis.Migrations
                     b.HasIndex("PedidoId")
                         .IsUnique();
 
-                    b.ToTable("NotaFiscail");
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("NotaFiscal");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Pagamento", b =>
@@ -180,9 +167,6 @@ namespace LojaDeTenis.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
@@ -198,11 +182,9 @@ namespace LojaDeTenis.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriaId");
-
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Pedidos");
+                    b.ToTable("Pedido");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.ProdPedi", b =>
@@ -242,9 +224,6 @@ namespace LojaDeTenis.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -262,8 +241,6 @@ namespace LojaDeTenis.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoriaId");
 
                     b.ToTable("Produto");
                 });
@@ -323,9 +300,17 @@ namespace LojaDeTenis.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("LojaDeTenis.Models.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cliente");
 
                     b.Navigation("Pedido");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Pagamento", b =>
@@ -341,19 +326,11 @@ namespace LojaDeTenis.Migrations
 
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
-                    b.HasOne("LojaDeTenis.Models.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LojaDeTenis.Models.Cliente", "Cliente")
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Categoria");
 
                     b.Navigation("Cliente");
                 });
@@ -361,7 +338,7 @@ namespace LojaDeTenis.Migrations
             modelBuilder.Entity("LojaDeTenis.Models.ProdPedi", b =>
                 {
                     b.HasOne("LojaDeTenis.Models.Pedido", "Pedido")
-                        .WithMany()
+                        .WithMany("ProdutosPedidos")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -369,28 +346,12 @@ namespace LojaDeTenis.Migrations
                     b.HasOne("LojaDeTenis.Models.Produto", "Produto")
                         .WithMany()
                         .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pedido");
 
                     b.Navigation("Produto");
-                });
-
-            modelBuilder.Entity("LojaDeTenis.Models.Produto", b =>
-                {
-                    b.HasOne("LojaDeTenis.Models.Categoria", "Categoria")
-                        .WithMany("Produtos")
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categoria");
-                });
-
-            modelBuilder.Entity("LojaDeTenis.Models.Categoria", b =>
-                {
-                    b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("LojaDeTenis.Models.Cliente", b =>
@@ -401,6 +362,8 @@ namespace LojaDeTenis.Migrations
             modelBuilder.Entity("LojaDeTenis.Models.Pedido", b =>
                 {
                     b.Navigation("NotaFiscal");
+
+                    b.Navigation("ProdutosPedidos");
                 });
 #pragma warning restore 612, 618
         }

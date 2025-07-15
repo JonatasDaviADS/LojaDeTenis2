@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LojaDeTenis.Controllers
 {
-    public class PedidosController : Controller
+    public class PedidoesController : Controller
     {
         private readonly LojaDeTenisContext _context;
 
-        public PedidosController(LojaDeTenisContext context)
+        public PedidoesController(LojaDeTenisContext context)
         {
             _context = context;
         }

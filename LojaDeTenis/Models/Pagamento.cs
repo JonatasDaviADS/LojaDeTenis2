@@ -18,6 +18,6 @@ namespace LojaDeTenis.Models
 
         [Required(ErrorMessage = "O método de pagamento é obrigatório")]
         [EnumDataType(typeof(MetodoPagamento), ErrorMessage = "Método de pagamento inválido")]
-        public MetodoPagamento MetodoPagamento { get; set; }
+        public string MetodoPagamento { get; set; }
     }
 }
